@@ -79,29 +79,39 @@ var model = {
   // upload the avtar 
   // req data --files
   uploadAvtar: function (data, callback) {
-    //- setting allowed file types
 
-    //- path to store uploaded files
-    var allowedDir = "../../assets/images";
+    //- setting allowed file types
     var uuid = '';
 
     data("file").upload({
-      maxBytes: 10000000 // 10 MB Storage 1 MB = 10^6
+      maxBytes: 10000000, // 10 MB Storage 1 MB = 10^6
+      dirname : "../../assets/images",
     }, function (err, uploadedFile) {
-      // console.log(err);
-      // console.log(uploadedFile);
       if (err) {
         callback('error at uploadAvtar', err);
       } else if (uploadedFile.length > 0) {
+        var getAllFilesId = [];
         async.concat(uploadedFile, function (n, callback) {
+
           Person.uploadFile(n, function (err, value) {
-            if (err) {
-              callback(err);
-            } else {
-              callback(null, value.name);
-            }
+
+            // console.log('**** inside %%%%%%%%%%%%%%%%%%%%% of Person.js ****',value);
+            getAllFilesId.push(value);
+            // if (err) {
+            //   callback(err);
+            // } else {
+            //   callback();
+            // }
+
+            callback();
           });
-        }, callback);
+
+
+        }, function (err, finalData) {
+          console.log('**** inside %%%%%%%%%%%%%%%%%%%%% of Person.js ****', getAllFilesId);
+          callback(null, getAllFilesId);
+        });
+
       } else {
         callback(null, {
           value: false,
@@ -111,62 +121,19 @@ var model = {
     });
   },
 
-
-
-  //   var d = new Date();
-  //   var extension = data.filename.split('.').pop();
-
-  //   //- generating unique filename with extension
-  //   uuid = md5(d.getMilliseconds()) + "." + extension;
-
-  //   //- seperate allowed and disallowed file types
-  //   if (allowedTypes.indexOf(data.headers['content-type']) === -1) {
-  //     //- save as disallowed files default upload path
-  //     callback(null, uuid);
-  //   } else {
-  //     //- save as allowed files
-  //     callback(null, allowedDir + "/" + uuid);
-  //   }
-  // },
-  // function whenDone(err, file) {
-  //   if (err) {
-  //     console.log('****error in uploadAvtar****', err);
-  //   } else {
-  //     callback(null, uuid);
-  //   }
-  // });
-
-
-  uploadFile: function (data, callback) {
-    // console.log('**** !!!!!!!!!!!!!!!! ****',filename);
+  uploadFile: function (file, callback) {
     var d = new Date();
-    var allowedDir = "../../assets/images";    
-    var extension = data.filename.split('.').pop();
+    var extension = file.filename.split('.').pop();
     var allowedTypes = ['image/jpeg', 'image/png'];
 
-    //- generating unique filename with extension
     uuid = md5(d.getMilliseconds()) + "." + extension;
-    // console.log('****!!!!!!!!!!!!!!!!! ****', uuid);
-    //- seperate allowed and disallowed file types
-    if (uuid) {
-      //- save as disallowed files default upload path
+
+    if (allowedTypes.indexOf(file.headers['content-type']) === -1)  {
       callback(null, uuid);
     } else {
-      //- save as allowed files
       callback(null, allowedDir + "/" + uuid);
     }
-
-    function whenDone(err, file) {
-      if (err) {
-        console.log('****error in uploadAvtar****', err);
-      } else {
-        callback(null, file);
-      }
-    }
   },
-
-
-
 
 };
 
