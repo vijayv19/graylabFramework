@@ -1,5 +1,5 @@
 /**
- * CustomerController
+ * PersonController
  *
  * @description :: Server-side logic for managing Customers
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
@@ -127,6 +127,19 @@ var controller = {
   deletePersonData: function (req, res) {
     if (req.body) {
       Person.deletePersonData(req.body, res.callback);
+    } else {
+      res.json({
+        value: false,
+        data: {
+          message: 'Invalid Request'
+        }
+      })
+    }
+  },
+
+  uploadAvtar: function (req, res) {
+    if (req.file) {
+      Person.uploadAvtar(req.file, res.callback);
     } else {
       res.json({
         value: false,

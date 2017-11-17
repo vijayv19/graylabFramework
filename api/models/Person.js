@@ -1,11 +1,12 @@
 /**
- * Customer.js
+ * Person.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
 var mongoose = require('mongoose');
+var md5 = require('md5');
 
 var personSchema = new Schema({
 
@@ -74,6 +75,98 @@ var model = {
     });
 
   },
+
+  // upload the avtar 
+  // req data --files
+  uploadAvtar: function (data, callback) {
+    //- setting allowed file types
+
+    //- path to store uploaded files
+    var allowedDir = "../../assets/images";
+    var uuid = '';
+
+    data("file").upload({
+      maxBytes: 10000000 // 10 MB Storage 1 MB = 10^6
+    }, function (err, uploadedFile) {
+      // console.log(err);
+      // console.log(uploadedFile);
+      if (err) {
+        callback('error at uploadAvtar', err);
+      } else if (uploadedFile.length > 0) {
+        async.concat(uploadedFile, function (n, callback) {
+          Person.uploadFile(n, function (err, value) {
+            if (err) {
+              callback(err);
+            } else {
+              callback(null, value.name);
+            }
+          });
+        }, callback);
+      } else {
+        callback(null, {
+          value: false,
+          data: "No files selected"
+        });
+      }
+    });
+  },
+
+
+
+  //   var d = new Date();
+  //   var extension = data.filename.split('.').pop();
+
+  //   //- generating unique filename with extension
+  //   uuid = md5(d.getMilliseconds()) + "." + extension;
+
+  //   //- seperate allowed and disallowed file types
+  //   if (allowedTypes.indexOf(data.headers['content-type']) === -1) {
+  //     //- save as disallowed files default upload path
+  //     callback(null, uuid);
+  //   } else {
+  //     //- save as allowed files
+  //     callback(null, allowedDir + "/" + uuid);
+  //   }
+  // },
+  // function whenDone(err, file) {
+  //   if (err) {
+  //     console.log('****error in uploadAvtar****', err);
+  //   } else {
+  //     callback(null, uuid);
+  //   }
+  // });
+
+
+  uploadFile: function (data, callback) {
+    // console.log('**** !!!!!!!!!!!!!!!! ****',filename);
+    var d = new Date();
+    var allowedDir = "../../assets/images";    
+    var extension = data.filename.split('.').pop();
+    var allowedTypes = ['image/jpeg', 'image/png'];
+
+    //- generating unique filename with extension
+    uuid = md5(d.getMilliseconds()) + "." + extension;
+    // console.log('****!!!!!!!!!!!!!!!!! ****', uuid);
+    //- seperate allowed and disallowed file types
+    if (uuid) {
+      //- save as disallowed files default upload path
+      callback(null, uuid);
+    } else {
+      //- save as allowed files
+      callback(null, allowedDir + "/" + uuid);
+    }
+
+    function whenDone(err, file) {
+      if (err) {
+        console.log('****error in uploadAvtar****', err);
+      } else {
+        callback(null, file);
+      }
+    }
+  },
+
+
+
 
 };
 
