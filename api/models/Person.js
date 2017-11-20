@@ -85,7 +85,7 @@ var model = {
 
     data("file").upload({
       maxBytes: 10000000, // 10 MB Storage 1 MB = 10^6
-      dirname : "../../assets/images",
+      dirname: "../../assets/images",
     }, function (err, uploadedFile) {
       if (err) {
         callback('error at uploadAvtar', err);
@@ -106,7 +106,6 @@ var model = {
             callback();
           });
 
-
         }, function (err, finalData) {
           console.log('**** inside %%%%%%%%%%%%%%%%%%%%% of Person.js ****', getAllFilesId);
           callback(null, getAllFilesId);
@@ -125,12 +124,12 @@ var model = {
     var d = new Date();
     var extension = file.filename.split('.').pop();
     var allowedTypes = ['image/jpeg', 'image/png'];
+    console.log('########################**', file);
+    uuid = file.fd.split('/').pop();
 
-    uuid = md5(d.getMilliseconds()) + "." + extension;
-
-    if (allowedTypes)  {
+    if (allowedTypes) {
       callback(null, uuid);
-      console.log('**** inside function_name of Person.js & data is ****',uuid);
+      console.log('**** inside function_name of Person.js & data is ****', uuid);
     } else {
       callback(null, uuid);
     }
