@@ -5,7 +5,10 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-module.exports = {
-	
-};
+var controller = {
 
+  
+  };
+  
+  module.exports = _.assign(controller);
+  

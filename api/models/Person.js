@@ -128,12 +128,14 @@ var model = {
 
     uuid = md5(d.getMilliseconds()) + "." + extension;
 
-    if (allowedTypes.indexOf(file.headers['content-type']) === -1)  {
+    if (allowedTypes)  {
       callback(null, uuid);
+      console.log('**** inside function_name of Person.js & data is ****',uuid);
     } else {
-      callback(null, allowedDir + "/" + uuid);
+      callback(null, uuid);
     }
   },
+
 
 };
 
