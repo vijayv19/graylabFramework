@@ -38,7 +38,7 @@ module.exports.routes = {
 
   // 'get /getTestData': 'CustomerController.testing',
 
-  // 'POST /createPersonData' : 'PersonController.createPerson',
+  'POST /createPersonData' : 'PersonController.createPerson',
 
   // 'GET /getData':'PersonController.view',
 
@@ -50,6 +50,8 @@ module.exports.routes = {
   
   // 'POST /insertData':'PersonConroller.insertData'
 
+  'POST /api/Person/search':'PersonController.search'
+  
   // '/': {
   //   controller: "WebController",
   //   action: "index",
@@ -72,6 +74,7 @@ module.exports.routes = {
   //   controller: "WebController",
   //   action: "download"
   // },
+  
 
 
 

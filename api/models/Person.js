@@ -6,40 +6,39 @@
  */
 
 var mongoose = require('mongoose');
-var md5 = require('md5');
 
 var personSchema = new Schema({
 
   name: {
-    type: 'string',
+    type: String,
+    required: true
   },
 
   age: {
-    type: 'string'
-  }
-});
+    type: Number
+  },
+  
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    index: true
+  },
 
-var person = mongoose.model('Person', personSchema);
+});
+personSchema.plugin(deepPopulate, {});
+
+module.exports = mongoose.model('Person', personSchema);
 
 var model = {
 
   findAllData: function (data, callback) {
-
-    console.log('@@@@@@@@@@@@@@@@', data);
     Person.find().exec(function (err, found) {
-
-      console.log('****---@@@@@@@@@@@@@@@@@@@@@@@ ****');
-      console.log('****---------------------------- !!!!!!!!!!!!!!!!!!!****', found);
-      // console.log('*********************************** ****',Person);
-
       if (err) {
         console.log('**** error at function_name of Person.js ****', err);
         callback(err, null);
       } else if (_.isEmpty(found)) {
         callback(null, 'no data found');
       } else {
-        console.log('****3333333333333333333333333333333333333333s ****', found);
-
         callback(null, found);
       }
     });
@@ -124,15 +123,98 @@ var model = {
     var d = new Date();
     var extension = file.filename.split('.').pop();
     var allowedTypes = ['image/jpeg', 'image/png'];
-    console.log('########################**', file);
     uuid = file.fd.split('/').pop();
 
     if (allowedTypes) {
       callback(null, uuid);
-      console.log('**** inside function_name of Person.js & data is ****', uuid);
     } else {
       callback(null, uuid);
     }
+  },
+
+  search: function (data, callback) {
+    console.log('****^^^^^^^^^^^^^^^^^ ****', data);
+    var Model = this;
+    var Const = this(data);
+    var maxRow = data.maxRow;
+    console.log('**** !!!!!!!!!!!!! ****', Model);
+    console.log('**** @@@@@@@@@@@@@@ ****', Const);
+    var page = 1;
+    if (data.page) {
+      page = data.page;
+    }
+    var field = data.field;
+
+    var options = {
+      field: data.field,
+      filters: {
+        keyword: {
+          fields: [data.fieldName],
+          term: data.keyword
+        }
+      },
+      sort: {
+        desc: 'createdAt'
+      },
+      start: (page - 1) * maxRow,
+      count: maxRow
+    };
+
+    if (defaultSort) {
+      if (defaultSortOrder && defaultSortOrder === "desc") {
+        options.sort = {
+          desc: defaultSort
+        };
+      } else {
+        options.sort = {
+          asc: defaultSort
+        };
+      }
+    }
+
+    var Search = Model.find(data.filter)
+
+      .order(options)
+      .deepPopulate(deepSearch)
+      .keyword(options)
+      .page(options, callback);
+
+  },
+
+
+  // what this function will do ?
+  // req data --> ?
+  temp: function (data, callback) {
+    // Person.create({
+    //   name: data.name,
+    //   age: data.age,
+    //   userId: data.userId
+    // }).exec(function (err, person) {
+
+    //   // Error handling
+    //   if (err) {
+    //     res.send("Error:Sorry!Something went Wrong");
+    //     console.log('**** inside function_name of PersonController.js & data is ****', err);
+    //   } else {
+    //     // console.log('**** Successfully Created!@@@@@@@@@@@@ ****');
+    //     res.send("Successfully Created!");
+    //     // res.send(person);
+    //     // res.redirect( 'person/view/'+model.id);
+    //   }
+    // });
+
+
+    var person = new Person(req.body);  
+    person.save((err, createdTodoObject) => {  
+        if (err) {
+            res.status(500).send(err);
+        }
+        // This createdTodoObject is the same one we saved, but after Mongo
+        // added its additional properties like _id.
+        res.status(200).send(createdTodoObject);
+    });
+
+
   },
 
 

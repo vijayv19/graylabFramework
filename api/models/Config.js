@@ -1,5 +1,3 @@
-var mongoose = require('mongoose');
-var md5 = require('md5');
 
 var configSchema = new Schema({
 
@@ -15,12 +13,9 @@ var configSchema = new Schema({
 var config = mongoose.model('Config', configSchema);
 
 var model = {
-  // what this function will do ?
-  // req data --> ?
   uploadFile: function (filename, callback) {
     var d = new Date();
     var extension = filename.split('.').pop();
-
     //- generating unique filename with extension
     uuid = md5(d.getMilliseconds()) + "." + extension;
 

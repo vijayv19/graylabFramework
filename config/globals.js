@@ -28,7 +28,7 @@ module.exports.globals = {
    *                                                                           *
    ****************************************************************************/
 
-  async: true,
+  async: false,
 
   /****************************************************************************
    *                                                                           *
@@ -66,21 +66,39 @@ module.exports.globals = {
 
 };
 
-
+// Mongoose Globals
 global["mongoose"] = require('mongoose');
-// global["ObjectId"] = mongoose.Types.ObjectId;
-// global["deepPopulate"] = require('mongoose-deep-populate')(mongoose);
+global["ObjectId"] = mongoose.Schema.Types.ObjectId;;
+global["deepPopulate"] = require('mongoose-deep-populate')(mongoose);
 global["uniqueValidator"] = require('mongoose-unique-validator');
-// global["timestamps"] = require('mongoose-timestamp');
-// global["validators"] = require('mongoose-validators');
-// global["monguurl"] = require('monguurl');
-// require('mongoose-middleware').initialize(mongoose);
+global["timestamps"] = require('mongoose-timestamp');
+global["validators"] = require('mongoose-validators');
+global["monguurl"] = require('monguurl');
+global["mongoose-schematypes-extend"] = require("mongoose-schematypes-extend");
+require('mongoose-middleware').initialize(mongoose);
 global["Schema"] = mongoose.Schema;
-// global["Grid"] = require('gridfs-stream');
-// global["gfs"] = Grid(mongoose.connection, mongoose);
+global["Grid"] = require('gridfs-stream');
+global["gfs"] = Grid(mongoose.connection, mongoose);
 global["http"] = require('http');
-// gfs.mongo = mongoose.mongo;
+gfs.mongo = mongoose.mongo;
 
+// Util Globals
+global["moment"] = require("moment");
+global["_"] = require('lodash');
+global["request"] = require('request');
+global["fs"] = require('fs');
+global["async"] = require('async');
+
+
+// Files to Import
+global["jsFiles"] = require("../frontend/files.js");
+
+
+
+// passport Globals
+global["passport"] = require('passport');
+global["LocalStrategy"] = require('passport-local').Strategy;
+global["FacebookStrategy"] = require('passport-facebook').Strategy;
 
 
 if (process.env.NODE_ENV && process.env.NODE_ENV === "production") {

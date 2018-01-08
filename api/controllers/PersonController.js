@@ -7,41 +7,34 @@
 
 var controller = {
   createPerson: function (req, res) {
-
-    var name = req.body.name;
-    var age = req.body.age;
-
-    if (req.method == "POST") {
-      console.log('**** &&&& inside create of PersonController.js &&&&****', name);
-      console.log('**** &&&& inside create of PersonController.js &&&&****', age);
-
       Person.create({
-        name: name,
-        age: age
+        name: req.body.name,
+        age: req.body.age,
+        userId: req.body.userId
       }).exec(function (err, person) {
-
-        // Error handling
         if (err) {
           res.send("Error:Sorry!Something went Wrong");
           console.log('**** inside function_name of PersonController.js & data is ****', err);
         } else {
-          // console.log('**** Successfully Created!@@@@@@@@@@@@ ****');
           res.send("Successfully Created!");
-          // res.send(person);
-          // res.redirect( 'person/view/'+model.id);
         }
       });
+  },
 
+  temp: function (req, res) {
+    if (req.body) {
+      Person.temp(req.body, res.callback);
     } else {
-      // console.log('**** ############################# ***');
-      res.render('person/createPerson');
+      res.json({
+        value: false,
+        data: {
+          message: 'Invalid Request'
+        }
+      })
     }
-
-
   },
 
   view: function (req, res) {
-
     Person.find().exec(function (err, persons) {
       console.log('**** inside function_name of PersonController.js & data is ****', persons);
       if (err) {
@@ -53,32 +46,32 @@ var controller = {
     });
   },
 
-  update: function (req, res) {
-    var id = req.body._id;
-    console.log('****!!!!!!!!!!!!!!!!!!!!!!!1 ****', id);
-    Person.find(id).exec(function (err, model) {
-      console.log('**** i@@@@@@@@@@@@@@@@@@@@@@@@@ ****', model);
+  // update: function (req, res) {
+  //   var id = req.body._id;
+  //   console.log('****!!!!!!!!!!!!!!!!!!!!!!!1 ****', id);
+  //   Person.find(id).exec(function (err, model) {
+  //     console.log('**** i@@@@@@@@@@@@@@@@@@@@@@@@@ ****', model);
 
-      if (req.method == "PUT") {
-        model.name = req.body.name;
-        model.age = req.body.age;
-        model.save(function (err) {
+  //     if (req.method == "PUT") {
+  //       model.name = req.body.name;
+  //       model.age = req.body.age;
+  //       model.save(function (err) {
 
-          if (err) {
-            res.send("Error");
-          } else {
-            res.redirect('person/update/' + model.id);
-          }
+  //         if (err) {
+  //           res.send("Error");
+  //         } else {
+  //           res.redirect('person/update/' + model.id);
+  //         }
 
-        });
+  //       });
 
-      } else {
-        res.render('person/update', {
-          'model': model
-        });
-      }
-    });
-  },
+  //     } else {
+  //       res.render('person/update', {
+  //         'model': model
+  //       });
+  //     }
+  //   });
+  // },
 
   delete: function (req, res) {
     console.log('**** inside @@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!1 ****', req.body);
@@ -88,7 +81,6 @@ var controller = {
       if (err) {
         return res.negotiate(err);
       }
-      console.log('****@@@@@@@@@@@@@@@@@ ****', deletedData);
       sails.log('Successfully Deleted !!!');
       return res.ok(deletedData);
     });
@@ -148,6 +140,11 @@ var controller = {
         }
       })
     }
+  },
+
+  search: function (req, res) {
+    console.log('**** inside function_name of PersonController.js & data is ****', req.model);
+    req.model.search(req.body, res.callback);
   },
 
 };

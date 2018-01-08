@@ -1,9 +1,15 @@
 {
   "dependencies": {
+    "async": "^2.6.0",
+    "bcrypt": "^1.0.3",
     "bower": "^1.8.2",
+    "connect-history-api-fallback": "^1.5.0",
     "ejs": "2.3.4",
-    "grunt": "1.0.1",
+    "gfs": "0.0.1",
+    "gridfs-stream": "^1.1.1",
+    "grunt": "^1.0.1",
     "grunt-bower-task": "^0.3.4",
+    "grunt-concurrent": "^2.3.1",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-coffee": "1.0.0",
     "grunt-contrib-concat": "1.0.1",
@@ -14,13 +20,33 @@
     "grunt-contrib-uglify": "1.0.1",
     "grunt-contrib-watch": "1.0.0",
     "grunt-sails-linker": "~0.10.1",
+    "grunt-sass": "^2.0.0",
     "grunt-sync": "0.5.2",
     "include-all": "^1.0.0",
+    "lackey-mongoose-ref-validator": "0.0.3",
+    "lodash": "^4.17.4",
     "md5": "^2.2.1",
-    "rc": "1.0.1",
+    "moment": "^2.19.3",
+    "mongod": "^2.0.0",
+    "mongodb": "^2.2.33",
+    "mongoose": "^4.13.6",
+    "mongoose-deep-populate": "^3.0.0",
+    "mongoose-gridfs": "^0.3.2",
+    "mongoose-middleware": "^1.0.0",
+    "mongoose-populate-virtuals": "^1.0.3",
+    "mongoose-schematypes-extend": "^0.3.2",
+    "mongoose-timestamp": "^0.6.0",
+    "mongoose-unique-validator": "^1.0.6",
+    "mongoose-validators": "^0.1.0",
+    "monguurl": "^0.1.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-local": "^1.0.0",
+    "request": "^2.83.0",
     "sails": "~0.12.14",
     "sails-disk": "~0.10.9",
-    "sails-mongo": "^0.12.2"
+    "sails-mongo": "^0.12.2",
+    "sails-mongoose": "0.0.3"
   },
   "name": "test",
   "private": true,
@@ -37,5 +63,11 @@
     "url": "git://github.com/vijay/test.git"
   },
   "author": "vijay",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "grunt-browser-sync": "^2.2.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-ejs-compile": "0.0.1",
+    "grunt-ejs-locals": "^0.1.1"
+  }
 }
