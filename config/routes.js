@@ -38,7 +38,7 @@ module.exports.routes = {
 
   // 'get /getTestData': 'CustomerController.testing',
 
-  'POST /createPersonData' : 'PersonController.createPerson',
+  'POST /createPersonData': 'PersonController.createPerson',
 
   // 'GET /getData':'PersonController.view',
 
@@ -47,11 +47,11 @@ module.exports.routes = {
   // 'PUT /updateData':'PersonController.update',
 
   // 'POST /findAllData':'PersonController.findAllData',
-  
+
   // 'POST /insertData':'PersonConroller.insertData'
 
-  'POST /api/Person/search':'PersonController.search'
-  
+  'POST /api/Person/search': 'PersonController.search',
+
   // '/': {
   //   controller: "WebController",
   //   action: "index",
@@ -74,7 +74,19 @@ module.exports.routes = {
   //   controller: "WebController",
   //   action: "download"
   // },
-  
+
+//   "POST /api/*/search": {
+//     controller: "WebController",
+//     action: "search"
+// },
+
+
+  "POST /api/*/delRestrictions": {
+    controller: "WebController",
+    action: "delRestrictions"
+},
+
+
 
 
 

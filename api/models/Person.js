@@ -5,9 +5,10 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
+
 var mongoose = require('mongoose');
 
-var personSchema = new Schema({
+var schema = new Schema({
 
   name: {
     type: String,
@@ -17,7 +18,7 @@ var personSchema = new Schema({
   age: {
     type: Number
   },
-  
+
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -25,9 +26,12 @@ var personSchema = new Schema({
   },
 
 });
-personSchema.plugin(deepPopulate, {});
 
-module.exports = mongoose.model('Person', personSchema);
+require('mongoose-middleware').initialize(mongoose);
+
+// personSchema.plugin(deepPopulate, {});
+
+module.exports = mongoose.model('Person', schema);
 
 var model = {
 
@@ -131,59 +135,6 @@ var model = {
       callback(null, uuid);
     }
   },
-
-  search: function (data, callback) {
-    console.log('****^^^^^^^^^^^^^^^^^ ****', data);
-    var Model = this;
-    var Const = this(data);
-    var maxRow = data.maxRow;
-    console.log('**** !!!!!!!!!!!!! ****', Model);
-    console.log('**** @@@@@@@@@@@@@@ ****', Const);
-    var page = 1;
-    if (data.page) {
-      page = data.page;
-    }
-    var field = data.field;
-
-    var options = {
-      field: data.field,
-      filters: {
-        keyword: {
-          fields: [data.fieldName],
-          term: data.keyword
-        }
-      },
-      sort: {
-        desc: 'createdAt'
-      },
-      start: (page - 1) * maxRow,
-      count: maxRow
-    };
-
-    if (defaultSort) {
-      if (defaultSortOrder && defaultSortOrder === "desc") {
-        options.sort = {
-          desc: defaultSort
-        };
-      } else {
-        options.sort = {
-          asc: defaultSort
-        };
-      }
-    }
-
-    var Search = Model.find(data.filter)
-
-      .order(options)
-      .deepPopulate(deepSearch)
-      .keyword(options)
-      .page(options, callback);
-
-  },
-
-
-  // what this function will do ?
-  // req data --> ?
   temp: function (data, callback) {
     // Person.create({
     //   name: data.name,
@@ -204,20 +155,77 @@ var model = {
     // });
 
 
-    var person = new Person(req.body);  
-    person.save((err, createdTodoObject) => {  
-        if (err) {
-            res.status(500).send(err);
-        }
-        // This createdTodoObject is the same one we saved, but after Mongo
-        // added its additional properties like _id.
-        res.status(200).send(createdTodoObject);
+    var person = new Person(req.body);
+    person.save((err, createdTodoObject) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      // This createdTodoObject is the same one we saved, but after Mongo
+      // added its additional properties like _id.
+      res.status(200).send(createdTodoObject);
     });
+  },
 
+  search: function (data, callback) {
+    // var data = req.body,
+    //   callback = res.callback
+    console.log('***heyyyyyyyyyyy ****', data);
+    var maxRow = 10;
+    if (data.totalRecords) {
+      maxRow = data.totalRecords;
+    }
 
+    var page = 1;
+    if (data.page) {
+      page = data.page;
+    }
+    var field = data.field;
+    var options = {
+      field: data.field,
+      filters: {
+        keyword: {
+          fields: ['name'],
+          term: data.keyword
+        }
+      },
+      sort: {
+        desc: 'createdAt'
+      },
+      start: (page - 1) * maxRow,
+      count: maxRow
+    };
+    Person.find({}).sort({
+        createdAt: -1
+      })
+      .order(options)
+      .keyword(options)
+      .page(options,
+        function (err, found) {
+          console.log('**** ^^^^^^^^^^ ****', found);
+          if (err) {
+            console.log('**** error at function_name of WebController.js ****', err);
+            callback(err, null);
+          } else if (_.isEmpty(found)) {
+            callback(null, []);
+          } else {
+            callback(null, found);
+          }
+        });
+    // Person.find({})
+    //   .order(options,
+    //     function (err, found) {
+    //       if (err) {
+    //         console.log('**** error at function_name of Person.js ****', err);
+    //         callback(err, null);
+    //       } else if (_.isEmpty(found)) {
+    //         callback(null, 'noDataFound');
+    //       } else {
+    //         callback(null, found);
+    //       }
+    //     });
   },
 
 
 };
 
-module.exports = _.assign(model);
+module.exports = _.assign(module.exports, model);

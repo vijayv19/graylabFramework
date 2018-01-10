@@ -4,21 +4,26 @@
  * @description :: Server-side logic for managing Customers
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+var mongoose = require('mongoose');
+ 
+// require('mongoose-middleware').initialize({
+//   maxDocs : 1000
+// }, mongoose);
 
 var controller = {
   createPerson: function (req, res) {
-      Person.create({
-        name: req.body.name,
-        age: req.body.age,
-        userId: req.body.userId
-      }).exec(function (err, person) {
-        if (err) {
-          res.send("Error:Sorry!Something went Wrong");
-          console.log('**** inside function_name of PersonController.js & data is ****', err);
-        } else {
-          res.send("Successfully Created!");
-        }
-      });
+    Person.create({
+      name: req.body.name,
+      age: req.body.age,
+      userId: req.body.userId
+    }).exec(function (err, person) {
+      if (err) {
+        res.send("Error:Sorry!Something went Wrong");
+        console.log('**** inside function_name of PersonController.js & data is ****', err);
+      } else {
+        res.send("Successfully Created!");
+      }
+    });
   },
 
   temp: function (req, res) {
@@ -143,10 +148,17 @@ var controller = {
   },
 
   search: function (req, res) {
-    console.log('**** inside function_name of PersonController.js & data is ****', req.model);
-    req.model.search(req.body, res.callback);
+    if (req.body) {
+      Person.search(req.body, res.callback);
+    } else {
+      res.json({
+        value: false,
+        data: {
+          message: 'Invalid Request'
+        }
+      })
+    }
   },
-
 };
 
 module.exports = _.assign(controller);

@@ -68,19 +68,21 @@ module.exports.globals = {
 
 // Mongoose Globals
 global["mongoose"] = require('mongoose');
-global["ObjectId"] = mongoose.Schema.Types.ObjectId;;
+global["ObjectId"] = mongoose.Types.ObjectId;;
 global["deepPopulate"] = require('mongoose-deep-populate')(mongoose);
 global["uniqueValidator"] = require('mongoose-unique-validator');
 global["timestamps"] = require('mongoose-timestamp');
 global["validators"] = require('mongoose-validators');
 global["monguurl"] = require('monguurl');
 global["mongoose-schematypes-extend"] = require("mongoose-schematypes-extend");
-require('mongoose-middleware').initialize(mongoose);
+// require('mongoose-middleware').initialize(mongoose);
+global["mongoose-middleware"] = require("mongoose-middleware");
 global["Schema"] = mongoose.Schema;
 global["Grid"] = require('gridfs-stream');
 global["gfs"] = Grid(mongoose.connection, mongoose);
 global["http"] = require('http');
 gfs.mongo = mongoose.mongo;
+// global["mongoose-paginate"] = require("mongoose-paginate");
 
 // Util Globals
 global["moment"] = require("moment");

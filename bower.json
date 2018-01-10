@@ -1,5 +1,5 @@
 {
-  "name": "nodeframework",
+  "name": "graylab",
   "description": "a Sails application",
   "main": "app.js",
   "authors": [
@@ -69,8 +69,7 @@
     "angular-ui-date": "^1.0.1",
     "ng-dialog": "^1.0.1",
     "highcharts-ng": "^1.0.1",
-    "highcharts": "^5.0.7",
-    "angular-promise-buttons": "^0.1.22"
+    "highcharts": "^5.0.7"
   },
   "resolutions": {
     "angular": "1.6.4",
